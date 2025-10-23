@@ -37,7 +37,7 @@ gii_combined <- gii_combined %>%
          GII_PercentChange = 100 * (GII_2019 - GII_2010) / GII_2010)
 ```
 
-Map the change
+Combine with world map and map the change
 ```{r}
 world_gii <- world_sf %>%
   left_join(gii_combined, by = c("COUNTRY" = "country"))
