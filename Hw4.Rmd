@@ -3,16 +3,74 @@ title: "Hw4"
 output: html_document
 date: "2025-10-21"
 ---
-Banana
+
+Load data
+```{r}
+library(readr)
+library(here)
+
+gii2010 <- read_csv(here("GII_2010.csv"))
+gii2019 <- read_csv(here("GII_2019.csv"))
+world_sf <- sf::st_read(here("world.geojson"))
+```
+
+Clean data
+```{r}
+library(dplyr)
+
+gii2010_clean <- gii2010 %>%
+  select(country, value) %>%
+  rename(GII_2010 = value)
+
+gii2019_clean <- gii2019 %>%
+  select(country, value) %>%
+  rename(GII_2019 = value)
+```
+
+combine 2010 and 2019 GII and get difference
+```{r}
+gii_combined <- gii2010_clean %>%
+  left_join(gii2019_clean, by = "country")
+
+gii_combined <- gii_combined %>%
+  mutate(GII_Difference = GII_2019 - GII_2010,
+         GII_PercentChange = 100 * (GII_2019 - GII_2010) / GII_2010)
+```
+
+Map the change
+```{r}
+world_gii <- world_sf %>%
+  left_join(gii_combined, by = c("COUNTRY" = "country"))
+
+library(tmap)
+
+tm_shape(world_gii) +
+  tm_polygons(
+    col = "GII_Difference",
+    palette = "-RdYlBu",     # Red = increase, Blue = decrease
+    title = "Change in Gender Inequality (2010–2019)",
+    style = "pretty",
+    n=10
+  ) +
+  tm_layout(
+    main.title = "Global Change in Gender Inequality Index, 2010–2019",
+    main.title.size = 1.2,
+    frame = FALSE,
+    legend.outside = TRUE
+  )
+```
+
 ```{r}
 
 ```
 
-
 ```{r}
 
 ```
 
+```{r}
+
+```
 
 ```{r}
 
