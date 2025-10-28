@@ -61,6 +61,30 @@ tm_shape(world_gii) +
 ```
 
 ```{r}
+#EW_fork
+
+library(tmap)
+packageVersion("tmap")
+
+EW_tm1 <- tm_shape(world_gii) +
+  tm_polygons(
+    col = "GII_Difference",
+    title = "Change in Gender Inequality (2010–2019)",
+    border.col = "black",
+    lwd = 0.5,
+   palette = "Blues",
+      n = 7,
+      style = "jenks"
+    ) +
+ tm_compass(type= "arrow",
+            size=1.8, 
+            position = tm_pos_out("right", 
+                                  "center",
+                                  pos.h= -0.05,
+                                  pos.v =0.72))
+
+
+EW_tm1
 
 ```
 
